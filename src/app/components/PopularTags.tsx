@@ -4,13 +4,28 @@ import { useEffect, useState } from "react";
 export function PopularTags() {
   //TODO: type JSX
   const [htmlTags, setHtmlTags] = useState<JSX.Element | JSX.Element[]>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const tags = await getTags();
-      const tagsHtmlApi = toHtmlTag(tags);
-      setHtmlTags(tagsHtmlApi);
-    })();
+    setLoading(true);
+    // (async () => {
+    //   const tags = await getTags();
+    //   const tagsHtmlApi = toHtmlTag(tags);
+    //   setHtmlTags(tagsHtmlApi);
+    // })();
+
+    async function fetchTags() {
+      try {
+        const tags = await getTags();
+        const tagsHtmlApi = toHtmlTag(tags);
+        setHtmlTags(tagsHtmlApi);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTags();
   }, []);
 
   function toHtmlTag(tags: string[] | undefined) {
@@ -30,21 +45,10 @@ export function PopularTags() {
     <div className="col-md-3">
       <div className="sidebar">
         <p>Popular Tags</p>
-
-        <div className="tag-list">{htmlTags}</div>
+        <div className="tag-list">
+          {loading ? <p>Loading tags...</p> : htmlTags}
+        </div>
       </div>
     </div>
   );
 }
-
-// function ListOfPopularTags() {
-//   return <div className="lala">Hola</div>;
-// }
-
-// function noPopularTagsResult() {
-//   return <div className="lolo">No found</div>;
-// }
-
-// export function PopularTags() {
-//   return <div> hello</div>;
-// }
