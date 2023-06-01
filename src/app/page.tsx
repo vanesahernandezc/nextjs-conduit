@@ -1,10 +1,8 @@
 "use client";
-import Image from "next/image";
+import Articles from "./components/articles/Articles";
 import Navigation from "./components/Navigation";
-import { useEffect } from "react";
-import getTags from "@/services/getTags";
-import { PopularTags } from "./components/PopularTags";
-
+import PopularTagss from "./components/popularTags/PopularTags";
+//TODO: key index for id in maps
 //TODO: page just in not sign in mode
 //TODO: navigation optional
 export default async function Home() {
@@ -36,63 +34,12 @@ export default async function Home() {
                   </li>
                 </ul>
               </div>
+              {/* @ts-expect-error Server Component */}
 
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="profile.html">
-                    <Image
-                      width={32}
-                      height={32}
-                      alt="profile-picture"
-                      src="https://i.imgur.com/Qr71crq.jpg"
-                    />
-                  </a>
-                  <div className="info">
-                    <a href="" className="author">
-                      Eric Simons
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart"></i> 29
-                  </button>
-                </div>
-                <a href="" className="preview-link">
-                  <h1>How to build webapps that scale</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                </a>
-              </div>
-
-              <div className="article-preview">
-                <div className="article-meta">
-                  <a href="profile.html">
-                    <Image
-                      width={32}
-                      height={32}
-                      alt="username"
-                      src="https://i.imgur.com/N4VcUeJ.jpg"
-                    />
-                  </a>
-                  <div className="info">
-                    <a href="" className="author">
-                      Albert Pai
-                    </a>
-                    <span className="date">January 20th</span>
-                  </div>
-                  <button className="btn btn-outline-primary btn-sm pull-xs-right">
-                    <i className="ion-heart"></i> 32
-                  </button>
-                </div>
-                <a href="" className="preview-link">
-                  <h1>lala</h1>
-                  <p>This is the description for the post.</p>
-                  <span>Read more...</span>
-                </a>
-              </div>
+              <Articles />
             </div>
-
-            <PopularTags />
+            {/* @ts-expect-error Server Component */}
+            <PopularTagss />
           </div>
         </div>
       </div>

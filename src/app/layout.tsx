@@ -7,6 +7,7 @@ export const metadata = {
   description: "A place to share your knowledge",
 };
 
+//TODO: navigation inside body just above {children}
 export default function RootLayout({
   children,
 }: {
