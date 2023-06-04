@@ -11,7 +11,7 @@ const getTags = async () => {
 };
 //TODO: loading component
 
-export default async function PopularTagss() {
+export default async function PopularTags() {
   const popularTags = await getTags();
 
   return (

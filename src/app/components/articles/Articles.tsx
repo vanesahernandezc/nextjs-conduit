@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { IArticle } from "../../interfaces/IArticle";
 type Response = {
@@ -10,12 +9,12 @@ const getArticles = async () => {
     "https://api.realworld.io/api/articles?limit=10&offset=0"
   );
   const data: Response = await response.json();
-  // console.log(data.articles);
   return data.articles;
 };
 export default async function Articles() {
   const articles = await getArticles();
 
+  //TODO: click on tags per article
   return (
     <>
       {articles.map((article, index) => {

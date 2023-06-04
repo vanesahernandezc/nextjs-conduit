@@ -1,7 +1,9 @@
-"use client";
+import ArticleNavigation from "./components/ArticleNavigation";
 import Articles from "./components/articles/Articles";
+import FeedNav from "./components/feedToggle/FeedNav";
+
 import Navigation from "./components/Navigation";
-import PopularTagss from "./components/popularTags/PopularTags";
+import PopularTags from "./components/popularTags/PopularTags";
 //TODO: key index for id in maps
 //TODO: page just in not sign in mode
 //TODO: navigation optional
@@ -20,26 +22,15 @@ export default async function Home() {
         <div className="container page">
           <div className="row">
             <div className="col-md-9">
-              <div className="feed-toggle">
-                <ul className="nav nav-pills outline-active">
-                  {/* <li className="nav-item">
-                    <a className="nav-link disabled" href="">
-                      Your Feed
-                    </a>
-                  </li> */}
-                  <li className="nav-item">
-                    <a className="nav-link active" href="">
-                      Global Feed
-                    </a>
-                  </li>
-                </ul>
-              </div>
+              <FeedNav />
+              {/* @ts-expect-error Server Component */}
+              <Articles />
               {/* @ts-expect-error Server Component */}
 
-              <Articles />
+              <ArticleNavigation />
             </div>
             {/* @ts-expect-error Server Component */}
-            <PopularTagss />
+            <PopularTags />
           </div>
         </div>
       </div>
