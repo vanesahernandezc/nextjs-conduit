@@ -7,7 +7,11 @@ import { usePathname } from "next/navigation";
 //TODO: The class is little to the right
 function Navigation() {
   const pathname = usePathname();
-
+  const isSameURL = (route: any) => {
+    if (route === location.pathname) {
+      return true;
+    }
+  };
   return (
     <header className="ng-scope ng-isolate-scope">
       <nav className="navbar navbar-light">
@@ -17,17 +21,28 @@ function Navigation() {
           </Link>
           <ul className="nav navbar-nav pull-xs-right">
             <li className="nav-item">
-              <Link className="nav-link active" href="/">
+              <Link
+                className={isSameURL("/") ? "nav-link active" : "nav-link"}
+                href="/"
+              >
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="/login" className="nav-link">
+              <Link
+                href="/login"
+                className={isSameURL("/login") ? "nav-link active" : "nav-link"}
+              >
                 Sign In
               </Link>
             </li>
             <li className="nav-item">
-              <Link href="/register" className="nav-link">
+              <Link
+                href="/register"
+                className={
+                  isSameURL("/register") ? "nav-link active" : "nav-link"
+                }
+              >
                 Sign Up
               </Link>
             </li>
