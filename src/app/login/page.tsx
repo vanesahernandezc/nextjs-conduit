@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 
-const loginUser = async (email: string, password: string) => {
+const loginUser = async (email: string, password: string, setError: any) => {
   try {
     const result = await fetch(`https://api.realworld.io/api/users/login`, {
       method: "POST",
@@ -14,15 +14,23 @@ const loginUser = async (email: string, password: string) => {
         },
       }),
     });
-    return result.json();
+    if (!result.ok) {
+      setError(true);
+      return;
+    }
+    return await result.json();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
 export default function Login() {
   const [{ email, password }, setForm] = useState({ email: "", password: "" });
 
+  const [error, setError] = useState(false);
+  const [errorEmailEmpty, setErrorEmailEmpty] = useState(false);
+  const [errorPasswordEmpty, setErrorPasswordEmpty] = useState(false);
+  const [errorTypeEmail, setErrorTypeEmail] = useState(false);
   const onChange = (e: any) => {
     e.preventDefault();
     const name = e.target.name;
@@ -30,10 +38,30 @@ export default function Login() {
 
     setForm((form) => ({ ...form, [name]: value }));
   };
-
+  function validateEmail(email: string) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    await loginUser(email, password);
+    setErrorTypeEmail(false);
+    if (!validateEmail(email)) {
+      setErrorTypeEmail(true);
+      return;
+    }
+    setErrorEmailEmpty(false);
+    setErrorPasswordEmpty(false);
+
+    const emptyEmail = email.trim() === "";
+    setErrorEmailEmpty(emptyEmail);
+    const emptyPassword = password.trim() === "";
+    setErrorPasswordEmpty(emptyPassword);
+
+    if (emptyEmail || emptyPassword) {
+      return;
+    }
+    setError(false);
+    await loginUser(email, password, setError);
   };
 
   return (
@@ -48,10 +76,34 @@ export default function Login() {
                 <a href="">Need an account?</a>
               </p>
 
-              {/* <ul className="error-messages">
-                <li>That email is already taken</li>
-              </ul> */}
-
+              {error ? (
+                <ul className="error-messages">
+                  <li>email or password is invalid</li>
+                </ul>
+              ) : (
+                ""
+              )}
+              {errorEmailEmpty ? (
+                <ul className="error-messages">
+                  <li>That email is empty</li>
+                </ul>
+              ) : (
+                ""
+              )}
+              {errorTypeEmail ? (
+                <ul className="error-messages">
+                  <li>That email is not valid</li>
+                </ul>
+              ) : (
+                ""
+              )}
+              {errorPasswordEmpty ? (
+                <ul className="error-messages">
+                  <li>That password is empty</li>
+                </ul>
+              ) : (
+                ""
+              )}
               <form>
                 <fieldset className="form-group">
                   <input
