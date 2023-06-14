@@ -8,9 +8,11 @@ const registerUser = async (
   username: string,
   email: string,
   password: string,
-  setError: any
+  setError: any,
+  setIsLoading: any
 ) => {
   try {
+    setIsLoading(true);
     const api = await fetch("https://api.realworld.io/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,11 +26,17 @@ const registerUser = async (
     });
     if (!api.ok) {
       setError(true);
+      setIsLoading(false);
+
       return;
     }
     return api.json();
   } catch (error) {
+    setIsLoading(true);
+
     console.error(error);
+  } finally {
+    setIsLoading(false);
   }
 };
 
@@ -38,6 +46,7 @@ export default function Register() {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorEmailEmpty, setErrorEmailEmpty] = useState(false);
   const [errorUsernameEmpty, setErrorUsernameEmpty] = useState(false);
@@ -74,7 +83,7 @@ export default function Register() {
     if (emptyEmail || emptyPassword || emptyUsername) {
       return;
     }
-    await registerUser(username, email, password, setError);
+    await registerUser(username, email, password, setError, setIsLoading);
   };
   return (
     <>
@@ -133,6 +142,7 @@ export default function Register() {
                     name="username"
                     value={username}
                     onChange={onChange}
+                    disabled={isLoading}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -144,6 +154,7 @@ export default function Register() {
                     name="email"
                     value={email}
                     onChange={onChange}
+                    disabled={isLoading}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -155,6 +166,7 @@ export default function Register() {
                     name="password"
                     value={password}
                     onChange={onChange}
+                    disabled={isLoading}
                   />
                 </fieldset>
                 <button

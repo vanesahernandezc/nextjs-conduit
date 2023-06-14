@@ -2,8 +2,14 @@
 import { useState } from "react";
 import Navigation from "../components/Navigation";
 
-const loginUser = async (email: string, password: string, setError: any) => {
+const loginUser = async (
+  email: string,
+  password: string,
+  setError: any,
+  setIsLoading: any
+) => {
   try {
+    setIsLoading(true);
     const result = await fetch(`https://api.realworld.io/api/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -16,17 +22,21 @@ const loginUser = async (email: string, password: string, setError: any) => {
     });
     if (!result.ok) {
       setError(true);
+      setIsLoading(false);
       return;
     }
     return await result.json();
   } catch (error) {
     console.error(error);
+    setIsLoading(true);
+  } finally {
+    setIsLoading(false);
   }
 };
 
 export default function Login() {
   const [{ email, password }, setForm] = useState({ email: "", password: "" });
-
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorEmailEmpty, setErrorEmailEmpty] = useState(false);
   const [errorPasswordEmpty, setErrorPasswordEmpty] = useState(false);
@@ -45,12 +55,12 @@ export default function Login() {
   const handleLogin = async (e: any) => {
     e.preventDefault();
     setErrorTypeEmail(false);
+    setErrorEmailEmpty(false);
+    setErrorPasswordEmpty(false);
     if (!validateEmail(email)) {
       setErrorTypeEmail(true);
       return;
     }
-    setErrorEmailEmpty(false);
-    setErrorPasswordEmpty(false);
 
     const emptyEmail = email.trim() === "";
     setErrorEmailEmpty(emptyEmail);
@@ -61,7 +71,7 @@ export default function Login() {
       return;
     }
     setError(false);
-    await loginUser(email, password, setError);
+    await loginUser(email, password, setError, setIsLoading);
   };
 
   return (
@@ -114,6 +124,7 @@ export default function Login() {
                     name="email"
                     value={email}
                     onChange={onChange}
+                    disabled={isLoading}
                   />
                 </fieldset>
                 <fieldset className="form-group">
@@ -125,6 +136,7 @@ export default function Login() {
                     id="password"
                     value={password}
                     onChange={onChange}
+                    disabled={isLoading}
                   />
                 </fieldset>
                 <button
