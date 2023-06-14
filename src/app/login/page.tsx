@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
 import Navigation from "../components/Navigation";
+import { useRouter } from "next/navigation";
 
 const loginUser = async (
   email: string,
   password: string,
   setError: any,
-  setIsLoading: any
+  setIsLoading: any,
+  router: any
 ) => {
   try {
     setIsLoading(true);
@@ -25,6 +27,8 @@ const loginUser = async (
       setIsLoading(false);
       return;
     }
+    localStorage.setItem("userLogged", JSON.stringify({ email, password }));
+    router.push("/");
     return await result.json();
   } catch (error) {
     console.error(error);
@@ -41,6 +45,7 @@ export default function Login() {
   const [errorEmailEmpty, setErrorEmailEmpty] = useState(false);
   const [errorPasswordEmpty, setErrorPasswordEmpty] = useState(false);
   const [errorTypeEmail, setErrorTypeEmail] = useState(false);
+  const router = useRouter();
   const onChange = (e: any) => {
     e.preventDefault();
     const name = e.target.name;
@@ -52,6 +57,7 @@ export default function Login() {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
+
   const handleLogin = async (e: any) => {
     e.preventDefault();
     setErrorTypeEmail(false);
@@ -71,7 +77,7 @@ export default function Login() {
       return;
     }
     setError(false);
-    await loginUser(email, password, setError, setIsLoading);
+    await loginUser(email, password, setError, setIsLoading, router);
   };
 
   return (

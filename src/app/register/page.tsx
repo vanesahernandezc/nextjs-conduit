@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Navigation from "../components/Navigation";
+import { useRouter } from "next/navigation";
 //TODO: how to pick this data
 // const registerUser =async(form.email:any )=>{
 //check empty or type of email
@@ -9,7 +10,8 @@ const registerUser = async (
   email: string,
   password: string,
   setError: any,
-  setIsLoading: any
+  setIsLoading: any,
+  router: any
 ) => {
   try {
     setIsLoading(true);
@@ -27,10 +29,11 @@ const registerUser = async (
     if (!api.ok) {
       setError(true);
       setIsLoading(false);
-
       return;
     }
-    return api.json();
+    localStorage.setItem("user", JSON.stringify({ username, email, password }));
+    router.push("/");
+    return await api.json();
   } catch (error) {
     setIsLoading(true);
 
@@ -52,6 +55,8 @@ export default function Register() {
   const [errorUsernameEmpty, setErrorUsernameEmpty] = useState(false);
   const [errorPasswordEmpty, setErrorPasswordEmpty] = useState(false);
   const [errorTypeEmail, setErrorTypeEmail] = useState(false);
+  const router = useRouter();
+
   const onChange = (e: any) => {
     setForm((form) => ({
       ...form,
@@ -83,7 +88,14 @@ export default function Register() {
     if (emptyEmail || emptyPassword || emptyUsername) {
       return;
     }
-    await registerUser(username, email, password, setError, setIsLoading);
+    await registerUser(
+      username,
+      email,
+      password,
+      setError,
+      setIsLoading,
+      router
+    );
   };
   return (
     <>
