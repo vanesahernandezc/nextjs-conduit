@@ -23,7 +23,7 @@ const ArticleNavigation = () => {
   // );
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
-  console.log(data);
+
   //here and fetch
   const totalApiPages = data.articlesCount;
   const totalPagination = Math.ceil(totalApiPages / PAGE_LIMIT);

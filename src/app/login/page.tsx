@@ -22,12 +22,14 @@ const loginUser = async (
         },
       }),
     });
+    const responseBody = await result.json();
+
     if (!result.ok) {
       setError(true);
       setIsLoading(false);
       return;
     }
-    localStorage.setItem("userLogged", JSON.stringify({ email, password }));
+    localStorage.setItem("userLogged", JSON.stringify(responseBody.user.token));
     router.push("/");
     return await result.json();
   } catch (error) {
