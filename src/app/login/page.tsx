@@ -29,7 +29,7 @@ const loginUser = async (
       setIsLoading(false);
       return;
     }
-    localStorage.setItem("userLogged", JSON.stringify(responseBody.user.token));
+    localStorage.setItem("userLogged", JSON.stringify(responseBody.user));
     router.push("/");
     return await result.json();
   } catch (error) {

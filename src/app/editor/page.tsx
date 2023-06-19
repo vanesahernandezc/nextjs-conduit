@@ -56,8 +56,6 @@ export default function Editor() {
     }));
   };
 
-  console.log(title, description, body, taglist);
-
   return (
     <>
       <Navigation />
