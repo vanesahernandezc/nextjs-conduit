@@ -1,8 +1,21 @@
 "use client";
 import Image from "next/image";
 import Navigation from "../components/Navigation";
+import MyArticles from "../components/MyArticles";
+
+//TODO: Edit profile settings button
+type User = {
+  email: string;
+  token: string;
+  username: string;
+  bio: string;
+  image: string;
+};
 
 export default function Profile() {
+  const item = localStorage.getItem("userLogged");
+  const user: User = item ? JSON.parse(item) : null;
+
   return (
     <>
       <Navigation />
@@ -15,17 +28,14 @@ export default function Profile() {
                   alt="lala"
                   width={26}
                   height={26}
-                  src="http://i.imgur.com/Qr71crq.jpg"
+                  src={user.image}
                   className="user-img"
                 />
-                <h4>Eric Simons</h4>
-                <p>
-                  Cofounder @GoThinkster, lived in Aols HQ for a few months,
-                  kinda looks like Peeta from the Hunger Games
-                </p>
+                <h4>{user.username}</h4>
+                <p>{user.bio}</p>
                 <button className="btn btn-sm btn-outline-secondary action-btn">
                   <i className="ion-plus-round"></i>
-                  &nbsp; Follow Eric Simons
+                  &nbsp; Follow {user.username}
                 </button>
               </div>
             </div>
@@ -49,8 +59,8 @@ export default function Profile() {
                   </li>
                 </ul>
               </div>
-
-              <div className="article-preview">
+              <MyArticles />
+              {/* <div className="article-preview">
                 <div className="article-meta">
                   <a href="">
                     <Image
@@ -75,9 +85,9 @@ export default function Profile() {
                   <p>This is the description for the post.</p>
                   <span>Read more...</span>
                 </a>
-              </div>
+              </div> */}
 
-              <div className="article-preview">
+              {/* <div className="article-preview">
                 <div className="article-meta">
                   <a href="">
                     <Image
@@ -109,7 +119,7 @@ export default function Profile() {
                     <li className="tag-default tag-pill tag-outline">Song</li>
                   </ul>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
