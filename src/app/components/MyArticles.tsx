@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { IArticle } from "../interfaces/IArticle";
 import Image from "next/image";
 //TODO: make the link in the article map
-
+//TODO: the toggle button in profile page and home page
 type Response = {
   articles: IArticle[];
 };

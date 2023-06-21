@@ -42,7 +42,7 @@ export default async function Articles() {
                 <i className="ion-heart"></i> {article.favoritesCount}
               </button>
             </div>
-            <a href="" className="preview-link">
+            <a href={`/article/${article.slug}`} className="preview-link">
               {<h1>{article.title}</h1>}
               <p>{article.description}</p>
               <span>Read more...</span>
