@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-
+//no fetching comments
 export type Article = {
   slug: string;
   title: string;
@@ -20,12 +20,55 @@ export type Article = {
     following: boolean;
   };
 };
-
+export type Comment = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  body: string;
+  author: {
+    username: string;
+    bio: string;
+    image: string;
+    following: boolean;
+  };
+};
 async function fetchArticleData(slug: any) {
   const response = await fetch(`https://api.realworld.io/api/articles/${slug}`);
   const { article }: { article: Article } = await response.json();
-  console.log(article);
   return article;
+}
+async function fetchComments(slug: any) {
+  const response = await fetch(
+    `https://api.realworld.io/api/articles/${slug}/comments`
+  );
+  const { comments }: { comments: Comment[] } = await response.json();
+  console.log(comments);
+  return comments;
+}
+//fetch q solo envie fncion no q se use
+async function fetchCreateComment(slug: any, comments: any) {
+  try {
+    const item = localStorage.getItem("userLogged");
+    const user = item ? JSON.parse(item) : null;
+
+    const response = await fetch(
+      `https://api.realworld.io/api/articles/${slug}/comments`,
+      {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${user.token}`,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          comment: comments,
+        }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
 }
 type User = {
   email: string;
@@ -37,9 +80,9 @@ type User = {
 function ArticleApi() {
   const params = useParams();
   const slug = params?.slug;
-  console.log(slug);
-  console.log(typeof slug);
+
   const [articleData, setArticleData] = useState<Article>();
+  const [comments, setComments] = useState<any>();
   const [isLoading, setIsLoading] = useState(true);
 
   const item = localStorage.getItem("userLogged");
@@ -49,7 +92,10 @@ function ArticleApi() {
     async function fetchData() {
       try {
         const data = await fetchArticleData(slug);
+        const comment = await fetchComments(slug);
+
         setArticleData(data);
+        setComments(comment);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching article data:", error);
@@ -59,10 +105,15 @@ function ArticleApi() {
 
     fetchData();
   }, []);
-
+  const CreateComment = async (e: any) => {
+    e.preventDefault();
+    await fetchCreateComment(slug, comments);
+    await fetchComments(slug);
+  };
   //TODO: error en el any en el useState al no poner any
   //TODO: articleData. title undefined
-
+  //test delete edit comment with my own account
+  //make functionality in edit and delete botton and post comment
   if (isLoading) {
     return null; // or a loading indicator
   }
@@ -179,65 +230,48 @@ function ArticleApi() {
                     src={user.image}
                     className="comment-author-img"
                   />
-                  <button className="btn btn-sm btn-primary">
+                  <button
+                    onClick={CreateComment}
+                    className="btn btn-sm btn-primary"
+                  >
                     Post Comment
                   </button>
                 </div>
               </form>
 
-              <div className="card">
-                <div className="card-block">
-                  <p className="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
-                </div>
-                <div className="card-footer">
-                  <a href="" className="comment-author">
-                    <Image
-                      width={32}
-                      height={32}
-                      alt="lala"
-                      src={user.image}
-                      className="comment-author-img"
-                    />
-                  </a>
-                  &nbsp;
-                  <a href="" className="comment-author">
-                    {user.username}
-                  </a>
-                  <span className="date-posted">Dec 29th</span>
-                </div>
-              </div>
-
-              <div className="card">
-                <div className="card-block">
-                  <p className="card-text">
-                    With supporting text below as a natural lead-in to
-                    additional content.
-                  </p>
-                </div>
-                <div className="card-footer">
-                  <a href="" className="comment-author">
-                    <Image
-                      width={32}
-                      height={32}
-                      alt="lala"
-                      src={user.image}
-                      className="comment-author-img"
-                    />
-                  </a>
-                  &nbsp;
-                  <a href="" className="comment-author">
-                    {user.username}
-                  </a>
-                  <span className="date-posted">Dec 29th</span>
-                  <span className="mod-options">
-                    <i className="ion-edit"></i>
-                    <i className="ion-trash-a"></i>
-                  </span>
-                </div>
-              </div>
+              {comments.map((comment: Comment, index: any) => {
+                return (
+                  <div key={index} className="card">
+                    <div className="card-block">
+                      <p className="card-text">{comment.body}</p>
+                    </div>
+                    <div className="card-footer">
+                      <a href="" className="comment-author">
+                        <Image
+                          width={32}
+                          height={32}
+                          alt="lala"
+                          src={comment.author.image}
+                          className={comment.author.image}
+                        />
+                      </a>
+                      &nbsp;
+                      <a href="" className="comment-author">
+                        {comment.author.username}
+                      </a>
+                      <span className="date-posted">
+                        {comment.updatedAt.toString()}
+                      </span>
+                      {user?.username === comment.author.username && (
+                        <span className="mod-options">
+                          <i className="ion-edit"></i>
+                          <i className="ion-trash-a"></i>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

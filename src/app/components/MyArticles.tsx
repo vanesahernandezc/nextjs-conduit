@@ -10,7 +10,6 @@ type Response = {
 
 const MyArticles = () => {
   const [articles, setArticles] = useState<IArticle[]>([]);
-  console.log(articles);
   useEffect(() => {
     const fetchData = async () => {
       try {

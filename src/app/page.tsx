@@ -25,7 +25,6 @@ export default async function Home() {
               {/* @ts-expect-error Server Component */}
               <Articles />
               {/* @ts-expect-error Server Component */}
-
               <ArticleNavigation />
             </div>
             {/* @ts-expect-error Server Component */}

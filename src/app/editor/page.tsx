@@ -1,23 +1,23 @@
 "use client";
 import React, { useState } from "react";
 import Navigation from "../components/Navigation";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 const createArticle = async (
   title: string,
   description: string,
   body: string,
-  taglist: string[]
+  taglist: string[],
+  router: any
 ) => {
   try {
-    const token = localStorage.getItem("userLogged");
-    if (!token) {
-      return;
-    }
-    const tokencito = JSON.parse(token);
+    const item = localStorage.getItem("userLogged");
+    const user = item ? JSON.parse(item) : null;
+
     const result = await fetch("https://api.realworld.io/api/articles", {
       method: "POST",
       headers: {
-        authorization: `Bearer ${tokencito}`,
+        authorization: `Bearer ${user.token}`,
         "content-type": "application/json",
       },
       body: JSON.stringify({
@@ -29,7 +29,9 @@ const createArticle = async (
         },
       }),
     });
-    return await result.json();
+    const lala = await result.json();
+    console.log(lala);
+    router.push(`/article/${lala.article.slug}`);
   } catch (error) {
     console.error(error);
   }
@@ -42,9 +44,10 @@ export default function Editor() {
     body: "",
     taglist: [],
   });
+  const router = useRouter();
   const handleArticle = async (e: any) => {
     e.preventDefault();
-    await createArticle(title, description, body, taglist);
+    await createArticle(title, description, body, taglist, router);
   };
 
   const onChange = (e: any) => {
@@ -107,9 +110,9 @@ export default function Editor() {
                     <div className="tag-list"></div>
                   </fieldset>
                   <button
+                    type="submit"
                     onClick={handleArticle}
                     className="btn btn-lg pull-xs-right btn-primary"
-                    type="button"
                   >
                     Publish Article
                   </button>

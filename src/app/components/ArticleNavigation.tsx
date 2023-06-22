@@ -29,6 +29,7 @@ const ArticleNavigation = () => {
   const totalPagination = Math.ceil(totalApiPages / PAGE_LIMIT);
   const handlePageClick = (pageNumber: number) => {
     setActivePage(pageNumber);
+    console.log(pageNumber);
   };
   if (data) {
     return (

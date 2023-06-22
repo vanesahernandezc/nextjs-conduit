@@ -9,6 +9,7 @@ const getArticles = async () => {
     "https://api.realworld.io/api/articles?limit=10&offset=0"
   );
   const data: Response = await response.json();
+  console.log(data);
   return data.articles;
 };
 export default async function Articles() {
