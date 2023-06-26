@@ -22,10 +22,6 @@ export default async function Home() {
           <div className="row">
             <div className="col-md-9">
               <FeedNav />
-              {/* @ts-expect-error Server Component */}
-              <Articles />
-              {/* @ts-expect-error Server Component */}
-              <ArticleNavigation />
             </div>
             {/* @ts-expect-error Server Component */}
             <PopularTags />

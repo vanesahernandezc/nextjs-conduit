@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Navigation from "../components/Navigation";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+//disabeld buttons at sending
 const createArticle = async (
   title: string,
   description: string,

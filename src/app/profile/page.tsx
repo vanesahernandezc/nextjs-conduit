@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Navigation from "../components/Navigation";
 import MyArticles from "../components/MyArticles";
+import FavoritedArticles from "../components/FavoritedArticles";
+import { useState } from "react";
 
 //TODO: Edit profile settings button
 type User = {
@@ -13,6 +15,7 @@ type User = {
 };
 
 export default function Profile() {
+  const [toggleNav, setToggleNav] = useState(true);
   const item = localStorage.getItem("userLogged");
   const user: User = item ? JSON.parse(item) : null;
 
@@ -48,18 +51,24 @@ export default function Profile() {
               <div className="articles-toggle">
                 <ul className="nav nav-pills outline-active">
                   <li className="nav-item">
-                    <a className="nav-link active" href="">
+                    <button
+                      className={toggleNav ? "nav-link active" : "nav-link"}
+                      onClick={() => setToggleNav(true)}
+                    >
                       My Articles
-                    </a>
+                    </button>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link" href="">
+                    <button
+                      className={toggleNav ? "nav-link" : "nav-link active"}
+                      onClick={() => setToggleNav(false)}
+                    >
                       Favorited Articles
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </div>
-              <MyArticles />
+              {toggleNav ? <MyArticles /> : <FavoritedArticles />}
             </div>
           </div>
         </div>

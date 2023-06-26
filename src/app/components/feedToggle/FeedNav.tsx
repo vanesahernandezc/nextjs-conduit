@@ -1,20 +1,33 @@
+"use client";
+import { useState } from "react";
+import Articles from "../articles/Articles";
+import MyFeed from "../MyFeed";
+
 export default function FeedNav() {
+  const [toggleNav, setToggleNav] = useState(true);
   return (
     <>
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
-          {/* <li className="nav-item">
-                    <a className="nav-link disabled" href="">
-                      Your Feed
-                    </a>
-                  </li> */}
           <li className="nav-item">
-            <a className="nav-link active" href="">
+            <button
+              className={toggleNav ? "nav-link active" : "nav-link "}
+              onClick={() => setToggleNav(true)}
+            >
+              Your Feed
+            </button>
+          </li>
+          <li className="nav-item">
+            <button
+              className={toggleNav ? "nav-link" : "nav-link active"}
+              onClick={() => setToggleNav(false)}
+            >
               Global Feed
-            </a>
+            </button>
           </li>
         </ul>
       </div>
+      {toggleNav ? <MyFeed /> : <Articles />}
     </>
   );
 }

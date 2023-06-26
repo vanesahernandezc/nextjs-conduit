@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 //no fetching comments
+//TODO: send comments
 export type Article = {
   slug: string;
   title: string;
