@@ -31,7 +31,6 @@ const createArticle = async (
       }),
     });
     const lala = await result.json();
-    console.log(lala);
     router.push(`/article/${lala.article.slug}`);
   } catch (error) {
     console.error(error);

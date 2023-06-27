@@ -16,9 +16,12 @@ type User = {
 
 export default function Profile() {
   const [toggleNav, setToggleNav] = useState(true);
+  const [isUserProfile, setIsUserProfile] = useState(null);
   const item = localStorage.getItem("userLogged");
   const user: User = item ? JSON.parse(item) : null;
-
+  // if(user.username === ){
+  //   setIsUserProfile(true);
+  // }
   return (
     <>
       <Navigation />
@@ -36,10 +39,13 @@ export default function Profile() {
                 />
                 <h4>{user.username}</h4>
                 <p>{user.bio}</p>
-                <button className="btn btn-sm btn-outline-secondary action-btn">
-                  <i className="ion-plus-round"></i>
-                  &nbsp; Follow {user.username}
-                </button>
+
+                <a
+                  className="btn btn-sm btn-outline-secondary action-btn"
+                  href="/settings"
+                >
+                  <i className="ion-gear-a"></i> Edit Profile Settings
+                </a>
               </div>
             </div>
           </div>

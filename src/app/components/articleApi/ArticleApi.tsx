@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import ToggleButtonArticle from "../ToggleButtonArticle";
 //no fetching comments
 //TODO: send comments
 export type Article = {
@@ -43,7 +44,6 @@ async function fetchComments(slug: any) {
     `https://api.realworld.io/api/articles/${slug}/comments`
   );
   const { comments }: { comments: Comment[] } = await response.json();
-  console.log(comments);
   return comments;
 }
 //fetch q solo envie fncion no q se use
@@ -66,7 +66,6 @@ async function fetchCreateComment(slug: any, comments: any) {
       }
     );
     const data = await response.json();
-    console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -120,6 +119,7 @@ function ArticleApi() {
   }
   //Follow buttons
   //! at the end of image
+
   return (
     <>
       <div className="article-page">
@@ -145,17 +145,8 @@ function ArticleApi() {
                   {articleData?.updatedAt.toString()}
                 </span>
               </div>
-              <button className="btn btn-sm btn-outline-secondary">
-                <i className="ion-plus-round"></i>
-                &nbsp; Unfollow {articleData?.author.username}{" "}
-                <span className="counter">(10)</span>
-              </button>
-              &nbsp;&nbsp;
-              <button className="btn btn-sm btn-outline-primary">
-                <i className="ion-heart"></i>
-                &nbsp; Favorite Post{" "}
-                <span className="counter">({articleData?.favoritesCount})</span>
-              </button>
+
+              <ToggleButtonArticle props={articleData} />
             </div>
           </div>
         </div>
@@ -200,16 +191,7 @@ function ArticleApi() {
                   {articleData?.updatedAt.toString()}
                 </span>
               </div>
-              <button className="btn btn-sm btn-outline-secondary">
-                <i className="ion-plus-round"></i>
-                &nbsp; Follow {articleData?.author.username}
-              </button>
-              &nbsp;
-              <button className="btn btn-sm btn-outline-primary">
-                <i className="ion-heart"></i>
-                &nbsp; Favorite Post{" "}
-                <span className="counter">({articleData?.favoritesCount})</span>
-              </button>
+              <ToggleButtonArticle props={articleData} />
             </div>
           </div>
 
